@@ -2,6 +2,7 @@ package com.wooteco.mail.business;
 
 import com.wooteco.mail.dto.MailSendRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,12 @@ public class MailService {
     }
 
     @KafkaListener(
-            id="mail-send",
             topics="sign-up",
-            clientIdPrefix = "clientId",
+            groupId = "mail",
             properties = {"enable.auto.commit:false", "auto.offset.reset:latest"}
     )
-    public void listen(String email) {
-        MailSendRequest request = new MailSendRequest(email, "HI", "BYE!");
+    public void listenSignUp(ConsumerRecord<Long, String> record) {
+        MailSendRequest request = new MailSendRequest(record.value(), "HI", "BYE!");
         mailSender.send(request.toMailMessage());
     }
 }
