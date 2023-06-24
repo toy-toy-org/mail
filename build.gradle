@@ -29,6 +29,9 @@ dependencies {
 
 	// kafka
 	implementation 'org.springframework.kafka:spring-kafka'
+
+//	implementation group: 'com.twilio.sdk', name: 'twilio', version: '9.7.0'
+	implementation 'com.twilio.sdk:twilio:9.7.0'
 }
 
 tasks.named('test') {
